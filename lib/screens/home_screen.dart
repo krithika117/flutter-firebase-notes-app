@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_notes_app/screens/note_editor.dart';
+import 'package:flutter_notes_app/screens/note_reader.dart';
 import 'package:flutter_notes_app/style/app_style.dart';
 import 'package:flutter_notes_app/widgets/note_card.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -30,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Text(
               'Your recent notes.',
-              style: GoogleFonts.montserrat(
+              style: GoogleFonts.nunito(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 22,
@@ -56,14 +58,20 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisCount: 2,
                       ),
                       children: snapshot.data!.docs
-                          .map((note) => noteCard(() {}, note))
+                          .map((note) => noteCard(() {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            NoteReaderScreen(note)));
+                              }, note))
                           .toList(),
                     );
                   }
 
                   return Text(
                     "No notes yet!",
-                    style: GoogleFonts.montserrat(
+                    style: GoogleFonts.nunito(
                       color: Colors.white,
                       fontWeight: FontWeight.normal,
                       fontSize: 22,
@@ -74,6 +82,18 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const NoteEditorScreen(),
+            ),
+          );
+        },
+        label: const Text("Add Note"),
+        icon: const Icon(Icons.add),
       ),
     );
   }
